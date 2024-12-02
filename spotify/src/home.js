@@ -14,7 +14,7 @@ const Home = () => {
         let token = localStorage.getItem('token')
 
         if (!token) {
-            navigate("/");
+            navigate("/login");
         }
     }, [navigate]);
 
