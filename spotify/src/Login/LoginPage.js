@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Await, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginStyle.css";
+
+
+import { loginUser } from "../API/userAPIservice";
 
 import LoginPageImg from "../assets/Login-Image.png";
 import Logo from "../assets/Logo.png";
 import icon from "../assets/Icon.png";
 import Lock from "../assets/Lock.png";
-import ClockIcon from "../assets/clock.png"; // اضافه کردن آیکون ساعت
+import ClockIcon from "../assets/clock.png"; 
 import lineDesign from "../assets/Group 222.png";
 import Line3Elipse from "../assets/line3elipse.png";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
+  const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotusername, setForgotusername] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [step, setStep] = useState(1);
   const [timer, setTimer] = useState(0);
@@ -30,31 +33,44 @@ const LoginPage = () => {
     }
     return () => clearInterval(interval);
   }, [timer]);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let formErrors = {};
-    if (!email) formErrors.email = "Required";
+    if (!username) formErrors.username = "Required";
     if (!password) formErrors.password = "Required";
-
+  
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
     } else {
       setErrors({});
-      console.log("Form submitted");
+      try {
+        const data = await loginUser({
+          username,
+          password,
+        });
+  
+        if (!data.ok) { 
+          throw new Error(data.message || "Login failed");
+        }
+  
+        localStorage.setItem("token", data.token);
+        console.log("Login successful! Token:", data.token);
+      } catch (error) {
+        console.error("Error during login:", error.message);
+        setErrors({ apiError: error.message });
+      }
     }
   };
+  
 
   const handleForgotPasswordSubmit = (e) => {
     e.preventDefault();
     if (step === 1) {
-      // اضافه کردن عملیات ارسال ایمیل و کد تأیید
-      console.log("Verification code sent to: ", forgotEmail);
+      console.log("Verification code sent to: ", forgotusername);
       setStep(2);
       setTimer(120);
     } else if (step === 2) {
-      // اضافه کردن عملیات تأیید کد و تغییر رمز عبور
-      if (verificationCode === "123456") { // اینجا باید کد صحیح بررسی شود
+      if (verificationCode === "123456") { 
         console.log("Verification Code Submitted: ", verificationCode);
         setStep(3);
       } else {
@@ -64,7 +80,7 @@ const LoginPage = () => {
   };
 
   const handleResendCode = () => {
-    console.log("Verification code resent to: ", forgotEmail);
+    console.log("Verification code resent to: ", forgotusername);
     setTimer(120);
   };
 
@@ -72,11 +88,11 @@ const LoginPage = () => {
     <form className="custom-form" onSubmit={handleSubmit}>
       <InputField 
         type="text" 
-        placeholder="email" 
+        placeholder="username" 
         icon={icon} 
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        error={errors.email}
+        value={username}
+        onChange={(e) => setusername(e.target.value)}
+        error={errors.username}
       />
       <InputField 
         type="password" 
@@ -106,10 +122,10 @@ const LoginPage = () => {
         <>
           <InputField 
             type="text" 
-            placeholder="Enter your email" 
+            placeholder="Enter your username" 
             icon={icon} 
-            value={forgotEmail}
-            onChange={(e) => setForgotEmail(e.target.value)}
+            value={forgotusername}
+            onChange={(e) => setForgotusername(e.target.value)}
           />
           <button type="submit" className="btn LoginStyle">Send Verification Code</button>
         </>
