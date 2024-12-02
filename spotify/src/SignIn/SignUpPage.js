@@ -1,25 +1,23 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./SignUnStyle.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LoginPageImg from "../assets/Login-Image.png";
 import Logo from "../assets/Logo.png";
 import icon from "../assets/Icon.png";
 import Lock from "../assets/Lock.png";
-import Email from "../assets/email.png";
 import lineDesign from "../assets/Group 222.png";
 import Line3Elipse from "../assets/line3elipse.png";
+import { signUser, verifyPhone } from "../API/userAPIservice";
 
 const SignInPage = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-    firstName: "",
-    lastName: "",
+    phoneNumber: "",
+    verificationCode: "",
   });
   const [errors, setErrors] = useState({});
+  const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -30,15 +28,35 @@ const SignInPage = () => {
 
   const validate = () => {
     let formErrors = {};
-    if (!formData.email) formErrors.email = "Required";
-    if (!formData.username) formErrors.username = "Required";
-    if (!formData.password) formErrors.password = "Required";
-    if (!formData.confirmPassword) formErrors.confirmPassword = "Required";
-    if (formData.password !== formData.confirmPassword) formErrors.confirmPassword = "Mismatch";
+    if (!formData.phoneNumber) formErrors.phoneNumber = "Required";
+    if (!formData.verificationCode) formErrors.verificationCode = "Required";
     return formErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSendVerificationCode = async () => {
+    //check if phone number is valid
+    let irphoneregex = /^(\+98|0)?9\d{9}$/;
+    if (!irphoneregex.test(formData.phoneNumber)) {
+      setErrors({
+        phoneNumber: "Invalid Phone Number"
+      });
+      return;
+    }
+
+    //send verification code
+    let result = await signUser(formData.phoneNumber);
+
+    if (!result.success) {
+      setErrors({
+        phoneNumber: "Failed to send verification code"
+      });
+      return;
+    }
+
+    setIsVerificationCodeSent(true);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validate();
     if (Object.keys(formErrors).length > 0) {
@@ -46,7 +64,24 @@ const SignInPage = () => {
     } else {
       setErrors({});
 
-      console.log("Form submitted");
+      let code = formData.verificationCode;
+      let phone = formData.phoneNumber;
+
+      //verify phone number
+      let result = await verifyPhone(phone, code);
+
+      if (!result.success) {
+        setErrors({
+          verificationCode: "Failed to verify phone number"
+        });
+        return;
+      }
+
+      //token set
+      localStorage.setItem("token", result.data.token);
+
+      //redirect to home
+      navigate("/home");
     }
   };
 
@@ -65,62 +100,30 @@ const SignInPage = () => {
         <div className="col-md-6 login-section">
           <img src={Logo} alt="Logo" className="SignIn_LogoDesign" />
           <form className="custom-form" onSubmit={handleSubmit}>
-            <div className="d-flex justify-content-center">
-              <InputField
-                type="text"
-                placeholder="first name"
-                className="input-line-name flex-item"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                error={errors.firstName}
-              />
-              <InputField
-                type="text"
-                placeholder="last name"
-                className="input-line-name flex-item"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                error={errors.lastName}
-              />
-            </div>
             <InputField
               type="text"
-              placeholder="email"
-              icon={Email}
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              error={errors.email}
-            />
-            <InputField
-              type="text"
-              placeholder="username"
+              placeholder="Phone Number"
               icon={icon}
-              name="username"
-              value={formData.username}
+              name="phoneNumber"
+              value={formData.phoneNumber}
               onChange={handleChange}
-              error={errors.username}
+              error={errors.phoneNumber}
             />
-            <InputField
-              type="password"
-              placeholder="password"
-              icon={Lock}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              error={errors.password}
-            />
-            <InputField
-              type="password"
-              placeholder="Confirm password"
-              icon={Lock}
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              error={errors.confirmPassword}
-            />
+            {isVerificationCodeSent ? (
+              <InputField
+                type="text"
+                placeholder="Verification Code"
+                icon={Lock}
+                name="verificationCode"
+                value={formData.verificationCode}
+                onChange={handleChange}
+                error={errors.verificationCode}
+              />
+            ) : (
+              <button type="button" className="btn SendVerificationCodeStyle" onClick={handleSendVerificationCode}>
+                Send Verification Code
+              </button>
+            )}
             <div className="text-end mb-3">
               <span className="text-white small-text"> have an account ? </span>
               <Link to="/" className="text-decoration-none forth"> Sign In</Link>

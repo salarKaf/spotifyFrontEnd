@@ -1,5 +1,5 @@
 const apiClient = {
-    baseURL: process.env.BASE_URL,
+    baseURL: "https://spotifyapi.phaedra.ir",
     headers: {
         'Content-Type': 'application/json'
     }
