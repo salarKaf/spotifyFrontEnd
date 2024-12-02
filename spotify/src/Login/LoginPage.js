@@ -10,7 +10,7 @@ import LoginPageImg from "../assets/Login-Image.png";
 import Logo from "../assets/Logo.png";
 import icon from "../assets/Icon.png";
 import Lock from "../assets/Lock.png";
-import ClockIcon from "../assets/clock.png"; 
+import ClockIcon from "../assets/clock.png";
 import lineDesign from "../assets/Group 222.png";
 import Line3Elipse from "../assets/line3elipse.png";
 
@@ -38,30 +38,29 @@ const LoginPage = () => {
     let formErrors = {};
     if (!username) formErrors.username = "Required";
     if (!password) formErrors.password = "Required";
-  
+
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
     } else {
       setErrors({});
-      try {
-        const data = await loginUser({
-          username,
-          password,
-        });
-  
-        if (!data.ok) { 
-          throw new Error(data.message || "Login failed");
-        }
-  
-        localStorage.setItem("token", data.token);
-        console.log("Login successful! Token:", data.token);
-      } catch (error) {
-        console.error("Error during login:", error.message);
-        setErrors({ apiError: error.message });
+
+      const response = await loginUser(username, password);
+
+      if (response.success) {
+        console.log("Login Successful");
+        //save token in local storage
+        let token = response.data.token;
+        localStorage.setItem("token", token);
+
+        //redirect to home page
+        window.location.href = "/home";
+      } else {
+        console.log("Login Failed");
+        setErrors({ username: "Invalid username or password" });
       }
     }
   };
-  
+
 
   const handleForgotPasswordSubmit = (e) => {
     e.preventDefault();
@@ -70,7 +69,7 @@ const LoginPage = () => {
       setStep(2);
       setTimer(120);
     } else if (step === 2) {
-      if (verificationCode === "123456") { 
+      if (verificationCode === "123456") {
         console.log("Verification Code Submitted: ", verificationCode);
         setStep(3);
       } else {
@@ -86,23 +85,23 @@ const LoginPage = () => {
 
   const renderLoginForm = () => (
     <form className="custom-form" onSubmit={handleSubmit}>
-      <InputField 
-        type="text" 
-        placeholder="username" 
-        icon={icon} 
+      <InputField
+        type="text"
+        placeholder="username"
+        icon={icon}
         value={username}
         onChange={(e) => setusername(e.target.value)}
         error={errors.username}
       />
-      <InputField 
-        type="password" 
-        placeholder="password" 
-        icon={Lock} 
+      <InputField
+        type="password"
+        placeholder="password"
+        icon={Lock}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         error={errors.password}
       />
-      
+
       <div className="d-flex justify-content-end mb-3">
         <a href="#" onClick={() => setIsForgotPassword(true)} className="text-decoration-none FPassword">Forgot your password?</a>
       </div>
@@ -120,10 +119,10 @@ const LoginPage = () => {
     <form className="custom-form" onSubmit={handleForgotPasswordSubmit}>
       {step === 1 && (
         <>
-          <InputField 
-            type="text" 
-            placeholder="Enter your username" 
-            icon={icon} 
+          <InputField
+            type="text"
+            placeholder="Enter your username"
+            icon={icon}
             value={forgotusername}
             onChange={(e) => setForgotusername(e.target.value)}
           />
@@ -132,10 +131,10 @@ const LoginPage = () => {
       )}
       {step === 2 && (
         <>
-          <InputField 
-            type="text" 
-            placeholder="Enter verification code" 
-            icon={icon} 
+          <InputField
+            type="text"
+            placeholder="Enter verification code"
+            icon={icon}
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
             error={errors.verificationCode}
@@ -180,10 +179,10 @@ const LoginPage = () => {
 
 const InputField = ({ type, placeholder, icon, value, onChange, error }) => (
   <div className="mb-3 position-relative input-field-wrapper">
-    <input 
-      type={type} 
-      className={`input-line ${error ? 'is-invalid' : ''}`} 
-      placeholder={placeholder} 
+    <input
+      type={type}
+      className={`input-line ${error ? 'is-invalid' : ''}`}
+      placeholder={placeholder}
       value={value}
       onChange={onChange}
     />
