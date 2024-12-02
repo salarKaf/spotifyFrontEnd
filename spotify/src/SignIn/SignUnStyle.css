@@ -222,3 +222,27 @@
     color: white;
   }
   
+
+  .input-field-wrapper {
+    position: relative;
+  }
+  
+  .input-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  .error-message {
+    color: red;
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8em;
+    pointer-events: none;
+  }
+  
+  
