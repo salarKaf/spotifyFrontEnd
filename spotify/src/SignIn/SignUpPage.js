@@ -45,7 +45,7 @@ const SignInPage = () => {
       setErrors(formErrors);
     } else {
       setErrors({});
-      // اجرای ارسال فرم یا هر عملیات دیگری
+
       console.log("Form submitted");
     }
   };
