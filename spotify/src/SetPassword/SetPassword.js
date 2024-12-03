@@ -57,7 +57,6 @@ const SignInPage = () => {
     }
   };
 
-  // Check if token exists in localStorage
   const token = localStorage.getItem("token");
   if (!token) {
     navigate("/login");

@@ -34,7 +34,6 @@ const SignInPage = () => {
   };
 
   const handleSendVerificationCode = async () => {
-    //check if phone number is valid
     let irphoneregex = /^(\+98|0)?9\d{9}$/;
     if (!irphoneregex.test(formData.phoneNumber)) {
       setErrors({
@@ -67,7 +66,6 @@ const SignInPage = () => {
       let code = formData.verificationCode;
       let phone = formData.phoneNumber;
 
-      //verify phone number
       let result = await verifyPhone(phone, code);
 
       if (!result.success) {
@@ -77,10 +75,9 @@ const SignInPage = () => {
         return;
       }
 
-      //token set
+      
       localStorage.setItem("token", result.data.token);
 
-      //redirect to home
       navigate("/home");
     }
   };
@@ -120,7 +117,7 @@ const SignInPage = () => {
                 error={errors.verificationCode}
               />
             ) : (
-              <button type="button" className="btn SendVerificationCodeStyle" onClick={handleSendVerificationCode}>
+              <button type="button" className="btn SendVerificationCodeStyle LoginGoogleStyle prompt" onClick={handleSendVerificationCode}>
                 Send Verification Code
               </button>
             )}
@@ -128,9 +125,7 @@ const SignInPage = () => {
               <span className="text-white small-text"> have an account ? </span>
               <Link to="/" className="text-decoration-none forth"> Sign In</Link>
             </div>
-            <button type="submit" className="btn LoginStyle">LOGIN</button>
-            <OrSeparator Line3Elipse={Line3Elipse} />
-            <button type="button" className="btn LoginGoogleStyle font-Prosto">G | Sign In with Google</button>
+            <button type="submit" className="btn LoginStyle">Sign Up</button>
           </form>
         </div>
       </div>
@@ -153,12 +148,12 @@ const InputField = ({ type, placeholder, icon, name, value, onChange, error }) =
   </div>
 );
 
-const OrSeparator = ({ Line3Elipse }) => (
-  <div className="d-flex align-items-center justify-content-center text-center mt-3">
-    <img src={Line3Elipse} className="rotated-image img-fluid" alt="First Image" />
-    <span className="mx-2 forth prompt">or</span>
-    <img src={Line3Elipse} className="img-fluid" alt="Second Image" />
-  </div>
-);
+// const OrSeparator = ({ Line3Elipse }) => (
+//   <div className="d-flex align-items-center justify-content-center text-center mt-3">
+//     <img src={Line3Elipse} className="rotated-image img-fluid" alt="First Image" />
+//     <span className="mx-2 forth prompt">or</span>
+//     <img src={Line3Elipse} className="img-fluid" alt="Second Image" />
+//   </div>
+// );
 
 export default SignInPage;

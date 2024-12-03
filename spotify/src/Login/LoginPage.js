@@ -92,8 +92,6 @@ const LoginPage = () => {
               <a href="#" className="text-decoration-none FPassword">Forgot your password?</a>
             </div>
             <button type="submit" className="btn LoginStyle">LOGIN</button>
-            <OrSeparator Line3Elipse={Line3Elipse} />
-            <button type="button" className="btn LoginGoogleStyle font-Prosto">G | Login with Google</button>
             <div className="text-center mt-5">
               <span className="text-white small-text">You don't have an account? </span>
               <Link to="/signUp" className="text-decoration-none forth">Sign Up</Link>
@@ -119,12 +117,6 @@ const InputField = ({ type, placeholder, icon, value, onChange, error }) => (
   </div>
 );
 
-const OrSeparator = ({ Line3Elipse }) => (
-  <div className="d-flex align-items-center justify-content-center text-center mt-3">
-    <img src={Line3Elipse} className="rotated-image img-fluid" alt="First Image" />
-    <span className="mx-2 forth prompt">or</span>
-    <img src={Line3Elipse} className="img-fluid" alt="Second Image" />
-  </div>
-);
+
 
 export default LoginPage;

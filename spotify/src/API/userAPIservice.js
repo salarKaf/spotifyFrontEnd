@@ -40,10 +40,16 @@ const verifyPhone = async (phoneNumber, code) => {
                 code
             })
         });
+        if (response.status !== 400)
+            return {
+                success: true,
+                message: 'Phone verification successful',
+                data: response
+            };
         return {
-            success: true,
-            message: 'Phone verification successful',
-            data: response
+            success: false,
+            message: 'Phone verification failed',
+            data: null
         };
     } catch (error) {
         console.error(error);
