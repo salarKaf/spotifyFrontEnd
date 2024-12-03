@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./SetPasswordStyle.css";
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ import icon from "../assets/Icon.png";
 import Lock from "../assets/Lock.png";
 import lineDesign from "../assets/Group 222.png";
 import Line3Elipse from "../assets/line3elipse.png";
-import { setPassword, signUser, verifyPhone } from "../API/userAPIservice";
+import { setPassword, signUser, validateUser, verifyPhone } from "../API/userAPIservice";
 
 const SignInPage = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +16,6 @@ const SignInPage = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,6 +24,27 @@ const SignInPage = () => {
       [e.target.name]: e.target.value
     });
   };
+
+  useEffect(() => {
+    let token = localStorage.getItem('token')
+
+    if (!token) {
+      navigate("/login");
+    }
+    (async () => {
+      let result = await validateUser(token);
+
+      if (!result.success) {
+        localStorage.removeItem("token");
+        console.log("Failed to validate user");
+        navigate("/login");
+      }
+
+      if (result.data.username) {
+        navigate("/home");
+      }
+    })()
+  }, [navigate]);
 
   const validate = () => {
     let formErrors = {};
@@ -77,7 +97,7 @@ const SignInPage = () => {
 
         <div className="col-md-6 login-section">
           <img src={Logo} alt="Logo" className="SignIn_LogoDesign" />
-          <form className="custom-form" onSubmit={handleSubmit}>
+          <form className="custom-form">
             <InputField
               type="text"
               placeholder="Username"
@@ -96,11 +116,7 @@ const SignInPage = () => {
               onChange={handleChange}
               error={errors.password}
             />
-            <button type="button" onClick={
-              () => {
-                handleSubmit();
-              }
-            } className="btn SetPasswordStyle">Set Password</button>
+            <button type="button" onClick={(e) => handleSubmit(e)} className="btn btn-success SetPasswordStyle">Set Password</button>
           </form>
         </div>
       </div>

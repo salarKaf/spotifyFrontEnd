@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./SignUnStyle.css";
 import { Link, useNavigate } from 'react-router-dom';
@@ -19,6 +19,13 @@ const SignInPage = () => {
   const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    let token = localStorage.getItem('token')
+
+    if (token) {
+      navigate("/home");
+    }
+  }, [navigate]);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -75,8 +82,8 @@ const SignInPage = () => {
         return;
       }
 
-      
-      localStorage.setItem("token", result.data.token);
+
+      localStorage.setItem("token", result.token);
 
       navigate("/home");
     }
@@ -122,10 +129,10 @@ const SignInPage = () => {
               </button>
             )}
             <div className="text-end mb-3">
-              <span className="text-white small-text"> have an account ? </span>
-              <Link to="/" className="text-decoration-none forth"> Sign In</Link>
+              <span className="text-white small-text"> have username and password? </span>
+              <Link to="/" className="text-decoration-none forth"> login In With password</Link>
             </div>
-            <button type="submit" className="btn LoginStyle">Sign Up</button>
+            <button type="submit" className="btn LoginStyle">verify</button>
           </form>
         </div>
       </div>

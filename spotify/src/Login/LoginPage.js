@@ -41,7 +41,8 @@ const LoginPage = () => {
 
         if (response && response.success) {
           console.log("Login Successful");
-          let token = response.data.token;
+          let token = response.token;
+          console.log("Token:", token);
           localStorage.setItem("token", token);
           navigate("/home");
         } else {
@@ -94,7 +95,7 @@ const LoginPage = () => {
             <button type="submit" className="btn LoginStyle">LOGIN</button>
             <div className="text-center mt-5">
               <span className="text-white small-text">You don't have an account? </span>
-              <Link to="/signUp" className="text-decoration-none forth">Sign Up</Link>
+              <Link to="/signUp" className="text-decoration-none forth">sign in with otp</Link>
             </div>
           </form>
         </div>
