@@ -1,0 +1,413 @@
+/* استایل کلی */
+.add-container {
+    margin-bottom: 1000px; /* فاصله از پایین صفحه */
+
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(
+      210deg,
+      #17153b 10%,
+      #1f1d51 20%,
+      #282567 50%,
+      #3f39a1 75%,
+      #c8acd6 200%
+    );
+    padding: 20px; /* اضافه کردن padding به کل صفحه */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* ایجاد فاصله بین فرم و فوتر */
+}
+
+  
+  .col-6 {
+    height: 100%; /* تنظیم ارتفاع ستون‌ها به 100% از ردیف */
+  }
+  
+  .col-6 {
+    padding-bottom: 170px; /* فاصله از پایین برای فوتر */
+  }
+  
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #282567;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-around; /* برای فاصله مساوی */
+    align-items: center; /* برای عمودی مرکز کردن */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* مطمئن شوید که فوتر بالای همه عناصر قرار می‌گیرد */
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  /* استایل کارت پیش‌نمایش */
+.preview-container {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-added {
+    width: 100%;
+    max-width: 800px;
+    background-color: rgba(162, 142, 201, 1);
+    color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.cover-image {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* تصویر مربع */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+
+.Add-container {
+    max-width: 800px;
+    width: 100%;
+    margin-top: 50px; 
+    /* margin-bottom: 1000px; فاصله از پایین صفحه */
+    background-color: #443d8b2e;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem; /* فاصله بیشتر بین فیلدها */
+}
+
+.form-label {
+    min-width: 120px; /* عرض ثابت برای برچسب‌ها */
+    margin-right: 10px; /* فاصله بین برچسب و فیلد ورودی */
+    text-align: left; /* راست‌چین کردن برچسب‌ها */
+    width: 150px; /* تنظیم عرض برای متن‌ها */
+}
+
+.form-control {
+    background-color: #2a2750;
+    border: 1px solid #3f39a1;
+    color: white;
+    width: 400px; /* افزایش عرض به طور کامل */
+    flex-grow: 1;
+    margin-top: 20px;
+    border-radius: 20px;
+
+}
+
+.form-control:focus {
+    background-color: #2a2750;
+    border-color: #c8acd6;
+    color: white;
+}
+
+.btn-primary {
+    margin-top: 40px;
+    background-color: #3f39a1;
+    border-color: #3f39a1;
+}
+
+.btn-primary:hover {
+    background-color: #c8acd6;
+    border-color: #c8acd6;
+}
+
+.preview-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card-added {
+    margin-top: 20px; /* رنگ صورتی برای کارت */
+    background-color: rgba(162, 142, 201, 1); /* رنگ تغییر یافته در هاور با اپسیتی کامل */
+    color: white;
+}
+
+.cover-image {
+    height: 300px; /* ارتفاع تصویر کاور */
+    object-fit: cover; /* برش یا زوم تصویر */
+    width: 100%; /* عرض تصویر */
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+
+
+.footer .icon-container {
+    text-align: center;
+    text-decoration: none;
+}
+
+.footer .icon-container img {
+    width: 15px;
+    height: 15px;
+    object-fit: cover;
+}
+
+.footer .icon-container span {
+    display: block;
+    color: white;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.add-title {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* استایل کارت پیش‌نمایش */
+.preview-container {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.card-added {
+    width: 100%;
+    max-width: 800px;
+    background-color: rgba(162, 142, 201, 1);
+    color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cover-image {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* تصویر مربع */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card-body {
+    padding: 10px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+
+
+/* استایل کارت پیش‌نمایش */
+.preview-container {
+    max-width: 600px; /* کاهش عرض کارت */
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.card-added {
+    width: 100%;
+    max-width: 600px; /* کاهش عرض کارت */
+    background-color: rgba(162, 142, 201, 1);
+    color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* افزودن transition برای هاور */
+}
+
+.card-added:hover {
+    transform: scale(1.05); /* بزرگ‌تر شدن کارت در هاور */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); /* سایه بیشتر در هاور */
+    cursor: pointer; /* تغییر نشانگر ماوس به دست */
+}
+
+.cover-image {
+    width: 100%;
+    height: 300px; /* افزایش ارتفاع عکس */
+    aspect-ratio: 1 / 1; /* تصویر مربع */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card-body {
+    padding: 10px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.btn-success {
+    background-color: #17153b;
+    border-color: #2d2a5d;
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.btn-success:hover {
+    background-color: #17153b;
+    border-color: #2d2a5d;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

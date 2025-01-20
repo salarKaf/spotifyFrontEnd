@@ -237,19 +237,19 @@
   margin-right: 20px; /* افزایش فاصله بین عکس و متن */
 }
 
-.card-text {
+.card-text-home {
   display: flex;
   flex-direction: column; /* متن‌ها به صورت عمودی */
   justify-content: center; /* متن‌ها در وسط عمودی قرار بگیرند */
 }
 
-.card-title {
+.card-title-home {
   font-size: 16px; /* افزایش اندازه فونت */
   font-weight: bold;
   color: white;
 }
 
-.card-artist {
+.card-artist-home {
   font-size: 14px; /* افزایش اندازه فونت */
   color: rgba(255, 255, 255, 0.8);
 }
@@ -448,4 +448,59 @@
 .recommended-section .card:hover {
   transform: scale(1.05); /* بزرگ کردن کارت در هاور */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* اضافه کردن سایه */
+}
+
+
+
+/* استایل دکمه Add new Song */
+.add-song-button-container {
+  position: relative; /* برای موقعیت‌دهی دکمه */
+  margin-top: 20px; /* فاصله از بالا */
+  margin-left: 920px; /* فاصله از چپ */
+}
+
+.add-song-button {
+  background-color: transparent; /* پس‌زمینه خالی */
+  color: #c8acd6; /* رنگ متن صورتی */
+  border: 2px solid #c8acd6; /* دور دکمه صورتی */
+  border-radius: 25px; /* گرد کردن گوشه‌ها */
+  padding: 10px 20px; /* فاصله داخلی */
+  font-size: 16px; /* اندازه فونت */
+  font-weight: 400;
+  cursor: pointer; /* تغییر شکل موس به اشاره‌گر */
+  transition: all 0.3s ease; /* افکت تغییر اندازه و رنگ */
+}
+
+/* هاور روی دکمه */
+.add-song-button:hover {
+  transform: scale(1.1); /* بزرگ‌تر شدن دکمه */
+  background-color: #b27ace; /* پس‌زمینه صورتی */
+  color: white; /* تغییر رنگ متن به سفید */
+  font-weight: 700;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* استایل آیکن سطل آشغال */
+.trash-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: #c8acd6; /* رنگ قرمز */
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.trash-icon:hover {
+  color: #ad7fc4; /* رنگ قرمز تیره هنگام هاور */
 }

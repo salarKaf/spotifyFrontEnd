@@ -1,0 +1,452 @@
+/* استایل کلی */
+.row {
+    height: 100vh; /* ارتفاع کل ردیف به 100vh (100% از ارتفاع صفحه) */
+    overflow: hidden; /* جلوگیری از اسکرول کل صفحه */
+  }
+  
+  .col-3,
+  .col-9 {
+    height: 100%; /* تنظیم ارتفاع ستون‌ها به 100% از ردیف */
+    overflow-y: auto; /* تنظیم اسکرول عمودی */
+  }
+  
+  .col-3 {
+    background-color: #433d8b; /* رنگ زرد برای بخش سمت چپ */
+    padding-bottom: 200px; /* فاصله از پایین برای فوتر */
+  }
+  
+  .col-9 {
+    background: linear-gradient(
+      210deg,
+      #17153b 10%,
+      #1f1d51 20%,
+      #282567 50%,
+      #3f39a1 75%,
+      #c8acd6 200%
+    ); /* رنگ آبی برای بخش وسط */
+    padding-bottom: 200px; /* فاصله از پایین برای فوتر */
+  }
+  
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #282567;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-around; /* برای فاصله مساوی */
+    align-items: center; /* برای عمودی مرکز کردن */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* مطمئن شوید که فوتر بالای همه عناصر قرار می‌گیرد */
+  }
+  
+  .footer .icon-container {
+    text-align: center; /* متن را در زیر تصویر وسط قرار می‌دهد */
+    text-decoration: none;
+  }
+  
+  .footer .icon-container img {
+    width: 15px; /* اندازه تصاویر */
+    height: 15px; /* اندازه تصاویر */
+    object-fit: cover; /* جلوگیری از کشیدگی یا تغییر نسبت ابعاد تصاویر */
+  }
+  
+  .footer .icon-container span {
+    display: block;
+    color: white; /* رنگ متن */
+    margin-top: 5px; /* فاصله بین تصویر و متن */
+    font-size: 12px; /* اندازه متن */
+  }
+  
+  /* استایل برای search bar */
+  /* استایل برای search bar */
+  .search-container {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 50px; /* گرد کردن گوشه‌ها بیشتر */
+    padding: 3px 12px;
+    margin-top: 40px; /* فاصله از بالا */
+    margin-bottom: 20px; /* فاصله از نتایج جستجو */
+    width: 100%; /* کاهش عرض سرچ بار */
+    max-width: 400px; /* محدود کردن به 400px */
+    font-family: "Roboto", sans-serif;
+    font-weight: 200 !important;
+  }
+  
+  .search-bar {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: transparent;
+  }
+  
+  .search-bar::placeholder {
+    color: #aaa;
+  }
+  
+  .search-icon {
+    font-size: 18px;
+    color: #433d8b;
+    margin-left: 10px;
+  }
+  
+  /* استایل برای بخش Recently */
+  .recently-section {
+    margin-top: 20px; /* فاصله از سرچ بار */
+  }
+  
+  .recently-text {
+    font-size: 18px;
+  
+    font-family: "Prompt", sans-serif;
+  
+    color: white;
+    opacity: 0.95;
+  }
+  
+  .recently-line {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* استایل برای نتایج جستجو */
+  .search-results {
+    margin-top: 20px;
+  }
+  .search-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    position: relative; /* برای جلوگیری از همپوشانی */
+    background-color: rgba(200, 172, 214, 0.3); /* رنگ پس‌زمینه با اپسیتی پایین */
+    transition: background-color 0.3s ease; /* انیمیشن برای رنگ پس‌زمینه */
+  }
+  
+  .search-item:hover {
+    background-color: rgba(
+      162,
+      142,
+      201,
+      1
+    ); /* رنگ تغییر یافته در هاور با اپسیتی کامل */
+  }
+  
+  .search-item img {
+    z-index: 2; /* اطمینان از اینکه تصویر از پس‌زمینه بالاتر باشد */
+  }
+  
+  .search-item span {
+    z-index: 2; /* اطمینان از اینکه متن از پس‌زمینه بالاتر باشد */
+  }
+  
+  .track-image {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .logo {
+    height: 120px;
+    margin-top: 0px;
+  }
+  
+  /* استایل برای هدر */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    margin-top: 0px;
+  }
+  
+  .notification-link {
+    position: relative;
+  }
+  
+  .notification-icon {
+    width: 25px; /* اندازه آیکن نوتیفیکیشن */
+    height: 25px;
+  }
+  
+  .username-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #c8acd6; /* رنگ صورتی */
+    color: #282567; /* رنگ آبی */
+    font-weight: bold;
+    font-size: 25px;
+  }
+  
+  .username-letter {
+    margin-left: 3px;
+  }
+  
+  .track-image {
+    width: 40px; /* اندازه تصویر */
+    height: 40px; /* اندازه تصویر */
+    object-fit: cover; /* تنظیمات برای اینکه تصویر به درستی داخل دایره قرار بگیرد */
+    border-radius: 50%; /* دایره کردن تصویر */
+  }
+  
+  .square-image {
+    width: 50px; /* اندازه کوچک */
+    height: 50px; /* اندازه کوچک */
+    object-fit: cover; /* تنظیمات برای اینکه تصویر به درستی داخل مربع قرار بگیرد */
+    border-radius: 5px; /* اگر می‌خواهید گوشه‌ها کمی گرد باشند */
+  }
+  
+  /* استایل برای کارت‌ها */
+  .recommended-cards {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(250px, 1fr)
+    ); /* سه کارت در هر ردیف */
+    gap: 20px; /* فاصله بین کارت‌ها */
+    padding: 0 20px; /* فاصله از کناره‌ها */
+    overflow-y: auto; /* اسکرول عمودی برای کارت‌ها */
+    max-height: 400px; /* ارتفاع حداکثر برای کارت‌ها */
+  }
+  
+  .card {
+    display: grid;
+    grid-template-columns: auto 1fr; /* عکس در سمت چپ، متن در سمت راست */
+    align-items: center; /* عکس و متن در وسط عمودی قرار بگیرند */
+    background-color: #3f39a1;
+    border-radius: 10px;
+    padding: 15px; /* افزایش padding */
+    height: 100px; /* افزایش ارتفاع کارت */
+  }
+  
+  .card-image {
+    width: 70px; /* افزایش اندازه عکس */
+    height: 70px; /* افزایش اندازه عکس */
+    border-radius: 8px;
+    margin-right: 20px; /* افزایش فاصله بین عکس و متن */
+  }
+  
+  .card-text {
+    display: flex;
+    flex-direction: column; /* متن‌ها به صورت عمودی */
+    justify-content: center; /* متن‌ها در وسط عمودی قرار بگیرند */
+  }
+  
+  .card-title {
+    font-size: 16px; /* افزایش اندازه فونت */
+    font-weight: bold;
+    color: white;
+  }
+  
+  .card-artist {
+    font-size: 14px; /* افزایش اندازه فونت */
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  /* رسپانسیو برای موبایل */
+  @media (max-width: 768px) {
+    .card {
+      width: 100%; /* در موبایل کارت‌ها زیر هم */
+    }
+  }
+  
+  /* استایل برای Recommended Albums و Recommended Tracks */
+  .recommended-section .recommended-cards {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(180px, 1fr)
+    ); /* چهار کارت در هر ردیف */
+    gap: 20px; /* افزایش فاصله بین کارت‌ها */
+    padding: 0 20px; /* فاصله از کناره‌ها */
+  }
+  
+  .recommended-section .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #3f39a1;
+    border-radius: 10px;
+    padding: 20px; /* افزایش padding */
+    height: auto; /* ارتفاع کارت بر اساس محتوا */
+  }
+  
+  .recommended-section .card-image {
+    width: 120px; /* افزایش اندازه عکس */
+    height: 120px; /* افزایش اندازه عکس */
+    border-radius: 8px;
+    margin-bottom: 15px; /* افزایش فاصله بین عکس و متن */
+  }
+  
+  .recommended-section .card-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .recommended-section .card-title {
+    font-size: 16px; /* افزایش اندازه فونت */
+    font-weight: bold;
+    color: white; /* رنگ سفید */
+    margin-bottom: 5px; /* فاصله بین عنوان و هنرمند */
+  }
+  
+  .recommended-section .card-artist {
+    font-size: 14px; /* افزایش اندازه فونت */
+    color: white; /* رنگ سفید */
+    opacity: 0.8; /* کمی شفافیت */
+  }
+  
+  /* استایل برای بخش Recently */
+  .recently-section {
+    margin-top: 30px; /* افزایش فاصله از سرچ بار */
+    margin-bottom: 40px; /* افزایش فاصله از بخش بعدی */
+  }
+  
+  /* استایل برای Recommended Albums */
+  .recommended-section {
+    margin-top: 40px; /* افزایش فاصله از بخش قبلی */
+    margin-bottom: 40px; /* افزایش فاصله از بخش بعدی */
+  }
+  
+  /* استایل برای Recommended Tracks */
+  .recommended-section:last-child {
+    margin-bottom: 80px; /* افزایش فاصله از پایین صفحه */
+  }
+  
+  /* استایل برای Recommended Albums و Recommended Tracks */
+  .recommended-section .recommended-cards {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(180px, 1fr)
+    ); /* چهار کارت در هر ردیف */
+    gap: 25px; /* افزایش فاصله بین کارت‌ها */
+    padding: 0 20px; /* فاصله از کناره‌ها */
+  }
+  
+  /* استایل برای بخش Recently Played */
+  .recently-section {
+    margin-top: 50px; /* فاصله از سرچ بار */
+    margin-bottom: 100px; /* افزایش فاصله از بخش بعدی */
+  }
+  
+  /* استایل برای Recommended Albums */
+  .recommended-section {
+    margin-top: 100px; /* افزایش فاصله از بخش قبلی */
+    margin-bottom: 100px; /* افزایش فاصله از بخش بعدی */
+  }
+  
+  /* استایل برای Recommended Tracks */
+  .recommended-section:last-child {
+    margin-bottom: 200px; /* افزایش فاصله از پایین صفحه */
+  }
+  
+  /* استایل برای Recommended Albums و Recommended Tracks */
+  .recommended-section .card-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .recommended-section .card-title {
+    font-size: 16px; /* افزایش اندازه فونت */
+    font-weight: bold; /* متن پررنگ */
+    color: white; /* رنگ سفید */
+    margin-bottom: 5px; /* فاصله بین عنوان و هنرمند */
+  }
+  
+  .recommended-section .card-artist {
+    font-size: 14px; /* افزایش اندازه فونت */
+    color: rgba(255, 255, 255, 0.7); /* رنگ سفید با کمی شفافیت */
+  }
+  
+  .section-title {
+    color: white;
+    font-family: "Prompt", sans-serif;
+    font-weight: 600;
+    margin-left: 20px;
+  }
+  
+  /* استایل برای متن‌های داخل کارت‌های Recently Searched و Search Results */
+  .search-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(200, 172, 214, 0.3); /* رنگ پس‌زمینه با اپسیتی پایین */
+    transition: background-color 0.3s ease; /* انیمیشن برای رنگ پس‌زمینه */
+  }
+  
+  .search-item:hover {
+    background-color: rgba(
+      162,
+      142,
+      201,
+      1
+    ); /* رنگ تغییر یافته در هاور با اپسیتی کامل */
+  }
+  
+  .search-item-text {
+    display: flex;
+    flex-direction: column; /* متن‌ها به صورت عمودی */
+    margin-left: 15px; /* فاصله بین عکس و متن */
+  }
+  
+  .search-item-title {
+    font-size: 14px; /* اندازه فونت */
+    font-weight: bold; /* متن پررنگ */
+    color: white; /* رنگ سفید */
+  }
+  
+  .search-item-artist {
+    font-size: 12px; /* اندازه فونت */
+    color: rgba(255, 255, 255, 0.7); /* رنگ سفید با کمی شفافیت */
+  }
+  
+  .card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    background-color: #3f39a1;
+    border-radius: 10px;
+    padding: 15px;
+    height: 100px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* اضافه کردن ترانزیشن */
+  }
+  
+  .card:hover {
+    transform: scale(1.05); /* بزرگ کردن کارت در هاور */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* اضافه کردن سایه */
+  }
+  
+  .recommended-section .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #3f39a1;
+    border-radius: 10px;
+    padding: 20px;
+    height: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* اضافه کردن ترانزیشن */
+  }
+  
+  .recommended-section .card:hover {
+    transform: scale(1.05); /* بزرگ کردن کارت در هاور */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* اضافه کردن سایه */
+  }
+  
