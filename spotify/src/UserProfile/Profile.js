@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import HomeIcon from "../assets/Home_Icon.png";
 import searchIcon from "../assets/Search_Icon.png";
 import LibIcon from "../assets/Lib_Icon.png";
+import './profile.css';
 
 const ProfilePage = () => {
   const [username, setUsername] = useState("Username");
@@ -10,6 +11,8 @@ const ProfilePage = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [songsCount, setSongsCount] = useState(50); // تعداد آهنگ‌ها
   const [isEditing, setIsEditing] = useState(false);
+  const [showSupportModal, setShowSupportModal] = useState(false);
+  const [supportMessage, setSupportMessage] = useState("");
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -29,17 +32,37 @@ const ProfilePage = () => {
     }
   };
 
+  const handleSupportClick = () => {
+    setShowSupportModal(true);
+  };
+
+  const handleSupportSubmit = () => {
+    // ارسال ایمیل به salarikosar5@gmail.com
+    window.location.href = `mailto:salarikosar5@gmail.com?subject=Support Request&body=${supportMessage}`;
+    setShowSupportModal(false);
+    setSupportMessage("");
+  };
+
   return (
     <div className="container-fluid profile-container h-100 d-flex flex-column">
       {/* بخش بالای فوتر (دو قسمت) */}
-      <div className="top-section">
-        <div className="top-left">
+      <div className="row flex-grow-1">
+        {/* بخش بالا (زرد) */}
+        <div className="top-part col-12">
+          {/* عکس پروفایل */}
+          <div className="profile-image-container">
+            <img
+              src={profileImage || "./assets/icon/Profile-image-default.png"} // عکس پیش‌فرض
+              alt="Profile"
+              className="profile-image"
+            />
+          </div>
           <h1>{username}</h1>
           <p>{songsCount} Songs</p>
         </div>
-        <div className="top-right">
-          <h2>Change your Profile</h2>
 
+        {/* بخش پایین (قرمز) */}
+        <div className="bottom-part red-part col-12">
           {isEditing ? (
             <div className="edit-form">
               <label>
@@ -66,14 +89,42 @@ const ProfilePage = () => {
                   onChange={handleImageChange}
                 />
               </label>
-              <button onClick={handleSave}>Save Changes</button>
+              <div className="add-song-button-container">
+                <button className="add-song-button" onClick={handleSave}>Save Changes</button>
+              </div>
             </div>
           ) : (
-            <button onClick={handleEditClick}>Change your Profile</button>
+            <div className="add-song-button-container">
+              <button className="add-song-button" onClick={handleEditClick}>Change your Profile</button>
+            </div>
           )}
 
-          <h3>Support</h3>
-          <p>If you have any problem, you can share with us :)</p>
+          {/* نمایش ایمیل با آیکون */}
+          <div className="email-section">
+            <img src="./assets/Icon/email.png" alt="Email" className="email-icon" />
+            <span className="email-text">Your Email: {email}</span>
+          </div>
+
+          {/* دکمه Support با آیکون */}
+          <div className="support-section">
+            <button className="support-button" onClick={handleSupportClick}>
+              <img src="./assets/Icon/support.png" alt="Support" className="support-icon" />
+              <span>Support</span>
+            </button>
+          </div>
+
+          {/* مودال برای Support */}
+          {showSupportModal && (
+            <div className="support-modal">
+              <textarea
+                placeholder="Enter your message..."
+                value={supportMessage}
+                onChange={(e) => setSupportMessage(e.target.value)}
+              />
+              <button onClick={handleSupportSubmit}>Send</button>
+              <button onClick={() => setShowSupportModal(false)}>Cancel</button>
+            </div>
+          )}
         </div>
       </div>
 

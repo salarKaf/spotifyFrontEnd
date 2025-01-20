@@ -481,6 +481,29 @@
 
 
 
+.btn-logout{  background-color: transparent; /* پس‌زمینه خالی */
+  color: #c8acd6; /* رنگ متن صورتی */
+  border: 2px solid #c8acd6; /* دور دکمه صورتی */
+  border-radius: 25px; /* گرد کردن گوشه‌ها */
+  padding: 10px 20px; /* فاصله داخلی */
+  font-size: 16px; /* اندازه فونت */
+  font-weight: 400;
+  cursor: pointer; /* تغییر شکل موس به اشاره‌گر */
+  transition: all 0.3s ease; /* افکت تغییر اندازه و رنگ */
+
+
+}
+
+
+/* هاور روی دکمه */
+.btn-logout:hover {
+  transform: scale(1.1); /* بزرگ‌تر شدن دکمه */
+  background-color: #b27ace; /* پس‌زمینه صورتی */
+  color: white; /* تغییر رنگ متن به سفید */
+  font-weight: 700;
+}
+
+
 
 
 

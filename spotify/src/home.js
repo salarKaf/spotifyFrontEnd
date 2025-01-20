@@ -9,10 +9,10 @@ import LibIcon from "./assets/Lib_Icon.png";
 import { FaSearch, FaTrash } from "react-icons/fa"; // اضافه کردن آیکن سطل آشغال
 import Logo from "./assets/Logo.png";
 import Notif from "./assets/notif.png";
+import { validateUser } from "./API/userAPIservice";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
   const [query, setQuery] = useState("");
   const [recentTracks, setRecentTracks] = useState(mockRecentTracks);
   const [recommendedTracks, setRecommendedTracks] = useState(mockRecommendedTracks);
@@ -69,14 +69,45 @@ const Home = () => {
     }
   ]);
 
-  useEffect(() => {
-    const user = mockUser;
-    if (!user.isLoggedIn) {
-      navigate("/login");
+
+
+      const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate("/");
+    };
+
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("N/A");
+    const [phone, setPhone] = useState("N/A");
+
+    useEffect(() => {
+        let token = localStorage.getItem('token')
+
+        if (!token) {
+            navigate("/login");
+        }
+
+        (async () => {
+            let result = await validateUser(token);
+
+            if (result.success) {
+                setUsername(result.data.username);
+                setEmail(result.data.email ?? "N/A");
+                setPhone(result.data.phoneNumber);
+            } else {
+                console.log("Failed to validate user");
+                navigate("/login");
+            }
+        })()
+    }, [navigate]);
+
+    let usernameTag = (<></>)
+
+    if (username == ""  || username == null){
+        usernameTag = (<Link to="/setpassword" className="btn btn-primary">Set Username Password</Link>)
     } else {
-      setUsername(user.username);
+        usernameTag = (<h3>username: {username}</h3>)
     }
-  }, []);
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
@@ -162,9 +193,9 @@ const Home = () => {
           <div className="header d-flex justify-content-between align-items-center py-2 px-3">
             <img src={Logo} alt="Logo" className="logo" />
             <div className="d-flex align-items-center">
-              <Link to="/notifications" className="notification-link">
-                <img src={Notif} alt="Notifications" className="notification-icon" />
-              </Link>
+              <div className="notification-link">
+                <button onClick={handleLogout} className="btn btn-logout">Log Out</button>
+              </div>
               <div className="username-circle ms-3">
                 <Link to="/profile">
                   <span className="username-letter">{username.charAt(0).toUpperCase()}</span>
