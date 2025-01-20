@@ -9,14 +9,15 @@ import { validateUser, AddCoverSong, AddAudioFile, AddSongToArtist } from "../AP
 
 const AddNewSong = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [trackName, setTrackName] = useState("");
   const [releaseDate, setReleaseDate] = useState("");
   const [trackCover, setTrackCover] = useState(null);
   const [audioFile, setAudioFile] = useState(null);
   const [newTrack, setNewTrack] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [imageKey, setImageKey] = useState(null); // کلید تصویر
-  const [musicKey, setMusicKey] = useState(null); // کلید آهنگ
+  const [imageKey, setImageKey] = useState(null);
+  const [musicKey, setMusicKey] = useState(null);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("N/A");
   const [phone, setPhone] = useState("N/A");
@@ -60,24 +61,25 @@ const AddNewSong = () => {
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      // Upload cover image
       const coverResponse = await AddCoverSong(token, trackCover);
       if (!coverResponse.success) {
         alert("Failed to upload cover image");
+        setIsLoading(false);
         return;
       }
-      setImageKey(coverResponse.key); // ذخیره کلید تصویر
+      setImageKey(coverResponse.key);
 
-      // Upload audio file
       const audioResponse = await AddAudioFile(token, audioFile);
       if (!audioResponse.success) {
         alert("Failed to upload audio file");
+        setIsLoading(false);
         return;
       }
-      setMusicKey(audioResponse.key); // ذخیره کلید آهنگ
+      setMusicKey(audioResponse.key);
 
-      // Prepare song data
       const songData = {
         name: trackName,
         releaseDate: releaseDate,
@@ -85,14 +87,13 @@ const AddNewSong = () => {
         musicKey: audioResponse.key
       };
 
-      // Add song to artist
       const addSongResponse = await AddSongToArtist(token, songData);
       if (!addSongResponse.success) {
         alert("Failed to add song to artist");
+        setIsLoading(false);
         return;
       }
 
-      // Reset form and show success message
       setIsSubmitted(true);
       setNewTrack(null);
       setTrackName("");
@@ -106,6 +107,8 @@ const AddNewSong = () => {
     } catch (error) {
       console.error("Error in handleComplete:", error);
       alert("An error occurred while processing your request.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -125,7 +128,6 @@ const AddNewSong = () => {
         setPhone(result.data.phoneNumber);
       } else {
         console.log("Failed to validate user");
-        localStorage.removeItem("token");
         navigate("/login");
       }
     })();
@@ -215,6 +217,11 @@ const AddNewSong = () => {
             <div className="preview-container p-4">
               <h4 className="text-white mb-4">Preview</h4>
               <div className="card-added">
+                {isLoading && (
+                  <div className="loading-overlay">
+                    <div className="loading-spinner"></div>
+                  </div>
+                )}
                 <img
                   src={newTrack.cover}
                   alt={newTrack.title}
@@ -224,15 +231,14 @@ const AddNewSong = () => {
                   <h5 className="card-title">{newTrack.title}</h5>
                   <p className="card-text">{newTrack.date}</p>
                 </div>
-                <button onClick={handleComplete} className="btn btn-success">
-                  Complete
+                <button onClick={handleComplete} className="btn btn-success" disabled={isLoading}>
+                  {isLoading ? 'Processing...' : 'Complete'}
                 </button>
               </div>
             </div>
           )}
         </div>
       </div>
-
     </div>
   );
 };
