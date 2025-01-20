@@ -176,7 +176,7 @@ const validateUser = async (token) => {
 const AddCoverSong = async (token, imageFile) => {
     try {
       const formData = new FormData();
-      formData.append('file', imageFile);
+      formData.append('image', imageFile);
   
       const response = await fetch(apiClient.baseURL + '/Media/files/image', {
         method: 'POST',
@@ -216,9 +216,9 @@ const AddCoverSong = async (token, imageFile) => {
   const AddAudioFile = async (token, audioFile) => {
     try {
       const formData = new FormData();
-      formData.append('file', audioFile);
+      formData.append('music', audioFile);
   
-      const response = await fetch(apiClient.baseURL + '/Media/files/audio', {
+      const response = await fetch(apiClient.baseURL + '/Media/files/music', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
