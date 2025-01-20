@@ -11,7 +11,6 @@ import Logo from "./assets/Logo.png";
 import { apiClient, getHomeSongs, getSearchSongs, validateUser } from "./API/userAPIservice";
 import { FaHeart } from "react-icons/fa"; // اضافه کردن آیکن قلب
 
-
 const Home = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -54,7 +53,6 @@ const Home = () => {
         navigate("/login");
       }
 
-
       let songsRes = await getHomeSongs(token);
 
       if (songsRes.success) {
@@ -71,7 +69,6 @@ const Home = () => {
 
         setUserSongs(songs);
       }
-
 
       let allSongs = await getSearchSongs(token, undefined);
 
@@ -109,12 +106,11 @@ const Home = () => {
     setUserSongs((prevSongs) => prevSongs.filter((_, i) => i !== index));
   };
 
-
-  const playSong = (songIndex, songList) => {
+  const playSong = (songId, songList) => {
     navigate("/MusicPlayer", {
       state: {
         songs: songList,
-        currentIndex: songIndex
+        currentSongId: songId // ارسال id آهنگ به جای index
       }
     });
   };
@@ -139,26 +135,6 @@ const Home = () => {
             />
             <FaSearch className="search-icon" />
           </div>
-          {/* 
-          {!isSearching && (
-            <>
-              <div className="recently-section-search">
-                <span className="recently-text">Recently</span>
-                <hr className="recently-line" />
-              </div>
-              <div className="search-results">
-                {mockRecentTracks.map((track, index) => (
-                  <div key={index} className="search-item" onClick={() => playSong(index, mockRecentTracks)}>
-                    <img src={track.songAvatar} alt={track.title} className="track-image circle-image" />
-                    <div className="search-item-text">
-                      <span className="search-item-title">{track.title}</span>
-                      <span className="search-item-artist">{track.Artist}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )} */}
 
           {isSearching && (
             <div className="search-results">
@@ -167,8 +143,8 @@ const Home = () => {
                   track.title.toLowerCase().includes(query.toLowerCase()) ||
                   track.Artist.toLowerCase().includes(query.toLowerCase())
                 )
-                .map((track, index) => (
-                  <div key={index} className="search-item" onClick={() => playSong(index, searchResults)}>
+                .map((track) => (
+                  <div key={track.id} className="search-item" onClick={() => playSong(track.id, searchResults)}>
                     <img src={track.songAvatar} alt={track.title} className="track-image" />
                     <div className="search-item-text">
                       <span className="search-item-title">{track.title}</span>
@@ -197,7 +173,7 @@ const Home = () => {
             <h5 className="section-title">ALL Your Song</h5>
             <div className="recommended-cards">
               {userSongs.map((track, index) => (
-                <div key={index} className="card" onClick={() => playSong(index, userSongs)}>
+                <div key={track.id} className="card" onClick={() => playSong(track.id, userSongs)}>
                   <img src={track.songAvatar} alt={track.title} className="card-image" />
                   <div className="card-text-home">
                     <span className="card-title-home">{track.title}</span>

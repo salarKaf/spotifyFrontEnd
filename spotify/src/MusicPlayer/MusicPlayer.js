@@ -5,26 +5,28 @@ import { likeMusic, unlikeMusic } from '../API/userAPIservice';
 
 const MusicPlayer = () => {
   const location = useLocation();
-  const { songs, currentIndex } = location.state || { songs: [], currentIndex: 0 };
+  const { songs, currentSongId } = location.state || { songs: [], currentSongId: null };
+
+  // پیدا کردن آهنگ بر اساس id
+  const currentSongIndex = songs.findIndex(song => song.id === currentSongId);
+  const [musicIndex, setMusicIndex] = useState(currentSongIndex >= 0 ? currentSongIndex : 0);
 
   // State for current music details
   const [currentMusicDetails, setCurrentMusicDetails] = useState({
-    songId: songs[currentIndex]?.id || 0,
-    songName: songs[currentIndex]?.title || 'No Song',
-    songArtist: songs[currentIndex]?.Artist || 'No Artist',
-    songSrc: songs[currentIndex]?.songSrc || '',
-    songAvatar: songs[currentIndex]?.songAvatar || '',
-    songIsLiked: songs[currentIndex]?.isLiked || false
+    songId: songs[musicIndex]?.id || 0,
+    songName: songs[musicIndex]?.title || 'No Song',
+    songArtist: songs[musicIndex]?.Artist || 'No Artist',
+    songSrc: songs[musicIndex]?.songSrc || '',
+    songAvatar: songs[musicIndex]?.songAvatar || '',
+    songIsLiked: songs[musicIndex]?.isLiked || false
   });
 
-  const [musicIndex, setMusicIndex] = useState(currentIndex);
   const [audioProgress, setAudioProgress] = useState(0);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [musicTotalLength, setMusicTotalLength] = useState('00 : 00');
   const [musicCurrentTime, setMusicCurrentTime] = useState('00 : 00');
   const [videoIndex, setVideoIndex] = useState(0);
   const [favorites, setFavorites] = useState(() => {
-    // بارگذاری لیست علاقه‌مندی‌ها از localStorage
     const savedFavorites = localStorage.getItem('favorites');
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
@@ -48,7 +50,8 @@ const MusicPlayer = () => {
         songName: musicObject.title,
         songArtist: musicObject.Artist,
         songSrc: musicObject.songSrc,
-        songAvatar: musicObject.songAvatar
+        songAvatar: musicObject.songAvatar,
+        songIsLiked: musicObject.isLiked
       });
 
       if (currentAudio.current) {
@@ -71,24 +74,18 @@ const MusicPlayer = () => {
         });
       }
     }
-
-
-    if (currentMusicDetails.songIsLiked) {
-      toggleFavorite();
-    }
-
   }, [musicIndex, songs]);
 
   // Handle next song
   const handleNextSong = () => {
-    if (songs.length > 1) { // فقط اگر لیست بیشتر از یک آهنگ داشته باشه
+    if (songs.length > 1) {
       setMusicIndex((prevIndex) => (prevIndex >= songs.length - 1 ? 0 : prevIndex + 1));
     }
   };
 
   // Handle previous song
   const handlePrevSong = () => {
-    if (songs.length > 1) { // فقط اگر لیست بیشتر از یک آهنگ داشته باشه
+    if (songs.length > 1) {
       setMusicIndex((prevIndex) => (prevIndex === 0 ? songs.length - 1 : prevIndex - 1));
     }
   };
@@ -126,7 +123,7 @@ const MusicPlayer = () => {
     const isFavorite = favorites.some(fav => fav.songSrc === currentSong.songSrc);
     let token = localStorage.getItem('token');
 
-    if(!token) {
+    if (!token) {
       alert('You need to login to like a song');
       return;
     }
@@ -136,13 +133,13 @@ const MusicPlayer = () => {
       const updatedFavorites = favorites.filter(fav => fav.songSrc !== currentSong.songSrc);
       setFavorites(updatedFavorites);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-      likeMusic(token, currentMusicDetails.songId);
+      unlikeMusic(token, currentMusicDetails.songId);
     } else {
       // افزودن آهنگ به لیست علاقه‌مندی‌ها
       const updatedFavorites = [...favorites, currentSong];
       setFavorites(updatedFavorites);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-      unlikeMusic(token, currentMusicDetails.songId);      
+      likeMusic(token, currentMusicDetails.songId);
     }
   };
 
