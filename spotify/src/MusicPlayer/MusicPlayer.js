@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import "./MusicPlayer.css";
+import { likeMusic, unlikeMusic } from '../API/userAPIservice';
 
 const MusicPlayer = () => {
   const location = useLocation();
@@ -43,6 +44,7 @@ const MusicPlayer = () => {
     if (songs.length > 0 && musicIndex >= 0 && musicIndex < songs.length) {
       const musicObject = songs[musicIndex];
       setCurrentMusicDetails({
+        songId: musicObject.id,
         songName: musicObject.title,
         songArtist: musicObject.Artist,
         songSrc: musicObject.songSrc,
@@ -122,19 +124,25 @@ const MusicPlayer = () => {
   const toggleFavorite = () => {
     const currentSong = songs[musicIndex];
     const isFavorite = favorites.some(fav => fav.songSrc === currentSong.songSrc);
+    let token = localStorage.getItem('token');
+
+    if(!token) {
+      alert('You need to login to like a song');
+      return;
+    }
 
     if (isFavorite) {
       // حذف آهنگ از لیست علاقه‌مندی‌ها
       const updatedFavorites = favorites.filter(fav => fav.songSrc !== currentSong.songSrc);
       setFavorites(updatedFavorites);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-      //TODO LIKE
+      likeMusic(token, currentMusicDetails.songId);
     } else {
       // افزودن آهنگ به لیست علاقه‌مندی‌ها
       const updatedFavorites = [...favorites, currentSong];
       setFavorites(updatedFavorites);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-      //TODO UNLIKE
+      unlikeMusic(token, currentMusicDetails.songId);      
     }
   };
 

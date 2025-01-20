@@ -379,6 +379,64 @@ const getSearchSongs = async (token, search) => {
   }
 }
 
+const likeMusic = async (token, musicId) => {
+  try {
+    const response = await fetch(apiClient.baseURL + `/Core/music/like/${musicId}`, {
+      method: 'POST',
+      headers: {
+        ...apiClient.headers,
+        Authorization: `Bearer ${token}`
+      },
+    });
+
+    if (response.status !== 200)
+      return {
+        success: false,
+        message: 'Failed to like music'
+      };
+
+    return {
+      success: true,
+      message: 'Music liked successfully'
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Failed to like music'
+    };
+  }
+}
+
+const unlikeMusic = async (token, musicId) => {
+  try {
+    const response = await fetch(apiClient.baseURL + `/Core/music/unlike/${musicId}`, {
+      method: 'DELETE',
+      headers: {
+        ...apiClient.headers,
+        Authorization: `Bearer ${token}`
+      },
+    });
+
+    if (response.status !== 200)
+      return {
+        success: false,
+        message: 'Failed to unlike music'
+      };
+
+    return {
+      success: true,
+      message: 'Music unliked successfully'
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Failed to unlike music'
+    };
+  }
+}
+
 
 module.exports = {
   signUser,
@@ -391,6 +449,8 @@ module.exports = {
   AddSongToArtist,
   getHomeSongs,
   getSearchSongs,
+  likeMusic,
+  unlikeMusic,
   apiClient
 };
 
