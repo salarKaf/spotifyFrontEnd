@@ -94,6 +94,17 @@ const MusicPlayer = () => {
     }
   };
 
+  // Handle progress bar change
+  const handleProgressChange = (e) => {
+    const newProgress = e.target.value;
+    setAudioProgress(newProgress);
+
+    if (currentAudio.current) {
+      const newTime = (newProgress / 100) * currentAudio.current.duration;
+      currentAudio.current.currentTime = newTime;
+    }
+  };
+
   return (
     <div className="container">
       <audio
@@ -123,7 +134,7 @@ const MusicPlayer = () => {
           name="musicProgressBar"
           className="musicProgressBar"
           value={audioProgress}
-          onChange={(e) => setAudioProgress(e.target.value)}
+          onChange={handleProgressChange} // تغییر اینجا
         />
         <div className="musicControlers">
           <i className="fa-solid fa-backward musicControler" onClick={handlePrevSong}></i>
