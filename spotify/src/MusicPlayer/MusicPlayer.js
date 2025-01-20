@@ -52,6 +52,14 @@ const MusicPlayer = () => {
             .then(() => setIsAudioPlaying(true))
             .catch((error) => console.error("Error playing audio:", error));
         });
+
+        // Update total length when metadata is loaded
+        currentAudio.current.addEventListener('loadedmetadata', () => {
+          const duration = currentAudio.current.duration;
+          const totalMin = Math.floor(duration / 60);
+          const totalSec = Math.floor(duration % 60);
+          setMusicTotalLength(`${totalMin < 10 ? `0${totalMin}` : totalMin} : ${totalSec < 10 ? `0${totalSec}` : totalSec}`);
+        });
       }
     }
   }, [musicIndex, songs]);
