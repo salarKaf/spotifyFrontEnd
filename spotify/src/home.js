@@ -101,10 +101,6 @@ const Home = () => {
     setIsSearching(query !== "");
   };
 
-  // تابع حذف آهنگ از لیست userSongs
-  const deleteUserSong = (index) => {
-    setUserSongs((prevSongs) => prevSongs.filter((_, i) => i !== index));
-  };
 
   const playSong = (songId, songList) => {
     navigate("/MusicPlayer", {
@@ -178,13 +174,6 @@ const Home = () => {
                   <div className="card-text-home">
                     <span className="card-title-home">{track.title}</span>
                     <span className="card-artist-home">{track.Artist}</span>
-                  </div>
-                  {/* آیکن سطل آشغال */}
-                  <div className="trash-icon" onClick={(e) => {
-                    e.stopPropagation(); // جلوگیری از اجرای onClick کارت
-                    deleteUserSong(index);
-                  }}>
-                    <FaTrash />
                   </div>
                 </div>
               ))}
