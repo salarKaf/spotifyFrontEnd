@@ -195,6 +195,29 @@ const Home = () => {
               </div>
             </Link>
           </div>
+
+          {/* بخش علاقه‌مندی‌ها */}
+          <div className="recently-section mt-4">
+            <h5 className="section-title">Favorites</h5>
+            <div className="recommended-cards">
+              {favorites.map((track, index) => (
+                <div key={track.id} className="card" onClick={() => playSong(track.id, favorites)}>
+                  <img src={track.songAvatar} alt={track.title} className="card-image" />
+                  <div className="card-text-home">
+                    <span className="card-title-home">{track.title}</span>
+                    <span className="card-artist-home">{track.Artist}</span>
+                  </div>
+                  {/* آیکن سطل آشغال */}
+                  <div className="trash-icon" onClick={(e) => {
+                    e.stopPropagation(); // جلوگیری از اجرای onClick کارت
+                    deleteRecommendedTrack(index);
+                  }}>
+                    <FaTrash />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
