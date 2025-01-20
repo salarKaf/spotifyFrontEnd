@@ -8,67 +8,16 @@ import searchIcon from "./assets/Search_Icon.png";
 import LibIcon from "./assets/Lib_Icon.png";
 import { FaSearch, FaTrash } from "react-icons/fa"; // اضافه کردن آیکن سطل آشغال
 import Logo from "./assets/Logo.png";
-import { validateUser } from "./API/userAPIservice";
+import { apiClient, getHomeSongs, getSearchSongs, validateUser } from "./API/userAPIservice";
 import { FaHeart } from "react-icons/fa"; // اضافه کردن آیکن قلب
 
 
 const Home = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const [recentTracks, setRecentTracks] = useState(mockRecentTracks);
-  const [recommendedTracks, setRecommendedTracks] = useState(mockRecommendedTracks);
   const [isSearching, setIsSearching] = useState(false);
-  const [userSongs, setUserSongs] = useState([
-    {
-      id: 1,
-      title: 'Flying (Live)',
-      Artist: 'Anathema',
-      songSrc: './assets/Songs/Anathema - Flying (Live).mp3',
-      songAvatar: './assets/TrackPhoto-ex.jpg'
-    },
-    {
-      id: 2,
-      title: 'burn down my house',
-      Artist: 'Architects',
-      songSrc: './assets/Songs/Architects - burn down my house.mp3',
-      songAvatar: './assets/images/img1.png'
-    },
-    {
-      id: 3,
-      title: 'houdini',
-      Artist: 'dua_lipa',
-      songSrc: './assets/Songs/dua_lipa_-_houdini.mp3',
-      songAvatar: './assets/images/img2.jpg'
-    },
-    {
-      id: 4,
-      title: 'Marde Tanha',
-      Artist: 'Farhad Mehrad',
-      songSrc: './assets/Songs/Farhad Mehrad - Marde Tanha (320).mp3',
-      songAvatar: './assets/images/img3.jpg'
-    },
-    {
-      id: 5,
-      title: 'All In My Mind',
-      Artist: 'Isaac Gracie',
-      songSrc: './assets/Songs/Isaac Gracie - All In My Mind.mp3',
-      songAvatar: './assets/AlbumPhoto-ex.jpg'
-    },
-    {
-      id: 6,
-      title: 'Heroin',
-      Artist: 'Lana Del Rey',
-      songSrc: './assets/Songs/Lana Del Rey - Heroin.mp3',
-      songAvatar: './assets/images/img2.jpg'
-    },
-    {
-      id: 7,
-      title: 'I`ll Be Waiting',
-      Artist: 'Isak Danielson',
-      songSrc: './assets/Songs/09 I`ll Be Waiting.mp3',
-      songAvatar: './assets/Images/img3.jpg'
-    }
-  ]);
+  const [searchResults, setSearchResults] = useState(mockRecentTracks);
+  const [userSongs, setUserSongs] = useState([]);
 
   // دریافت لیست علاقه‌مندی‌ها از localStorage
   const [favorites, setFavorites] = useState(() => {
@@ -101,7 +50,42 @@ const Home = () => {
         setPhone(result.data.phoneNumber);
       } else {
         console.log("Failed to validate user");
+        localStorage.removeItem("token");
         navigate("/login");
+      }
+
+
+      let songsRes = await getHomeSongs(token);
+
+      if (songsRes.success) {
+        let songs = songsRes.data.map((song) => {
+          return {
+            id: song.id,
+            title: song.name,
+            Artist: `user ${song.artistId}`,
+            songSrc: `${apiClient.baseURL}/Media/files/stream/${song.musicKey}`,
+            songAvatar: `${apiClient.baseURL}/Media/files/image/${song.imageKey}`,
+            isLiked: song.isLiked
+          };
+        });
+
+        setUserSongs(songs);
+      }
+
+
+      let allSongs = await getSearchSongs(token, undefined);
+
+      if (allSongs.success) {
+        setSearchResults(allSongs.data.map((song) => {
+          return {
+            id: song.id,
+            title: song.name,
+            Artist: `user ${song.artistId}`,
+            songSrc: `${apiClient.baseURL}/Media/files/stream/${song.musicKey}`,
+            songAvatar: `${apiClient.baseURL}/Media/files/image/${song.imageKey}`,
+            isLiked: song.isLiked
+          };
+        }));
       }
     })();
   }, [navigate]);
@@ -155,7 +139,7 @@ const Home = () => {
             />
             <FaSearch className="search-icon" />
           </div>
-
+          {/* 
           {!isSearching && (
             <>
               <div className="recently-section-search">
@@ -174,17 +158,17 @@ const Home = () => {
                 ))}
               </div>
             </>
-          )}
+          )} */}
 
           {isSearching && (
             <div className="search-results">
-              {mockRecentTracks
+              {searchResults
                 .filter(track =>
                   track.title.toLowerCase().includes(query.toLowerCase()) ||
                   track.Artist.toLowerCase().includes(query.toLowerCase())
                 )
                 .map((track, index) => (
-                  <div key={index} className="search-item" onClick={() => playSong(index, mockRecentTracks)}>
+                  <div key={index} className="search-item" onClick={() => playSong(index, searchResults)}>
                     <img src={track.songAvatar} alt={track.title} className="track-image" />
                     <div className="search-item-text">
                       <span className="search-item-title">{track.title}</span>
@@ -234,29 +218,6 @@ const Home = () => {
                 <button className="add-song-button">Add new Song</button>
               </div>
             </Link>
-          </div>
-
-          <div className="recommended-section mt-4 mb-5">
-            <h5 className="section-title">Recommended Tracks</h5>
-            <div className="recommended-cards">
-              {/* نمایش لیست علاقه‌مندی‌ها */}
-              {favorites.map((track, index) => (
-                <div key={index} className="card" onClick={() => playSong(index, favorites)}>
-                  <img src={track.songAvatar} alt={track.title} className="card-image" />
-                  <div className="card-text-home">
-                    <span className="card-title-home">{track.title}</span>
-                    <span className="card-artist-home">{track.Artist}</span>
-                  </div>
-                  {/* آیکن قلب */}
-                  <div className="heart-icon" onClick={(e) => {
-                    e.stopPropagation(); // جلوگیری از اجرای onClick کارت
-                    deleteRecommendedTrack(index); // حذف آهنگ از لیست علاقه‌مندی‌ها
-                  }}>
-                    <FaHeart className={favorites.some(fav => fav.songSrc === track.songSrc) ? "fa-solid" : "fa-regular"} />
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>

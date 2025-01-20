@@ -8,10 +8,12 @@ const MusicPlayer = () => {
 
   // State for current music details
   const [currentMusicDetails, setCurrentMusicDetails] = useState({
+    songId: songs[currentIndex]?.id || 0,
     songName: songs[currentIndex]?.title || 'No Song',
     songArtist: songs[currentIndex]?.Artist || 'No Artist',
     songSrc: songs[currentIndex]?.songSrc || '',
-    songAvatar: songs[currentIndex]?.songAvatar || ''
+    songAvatar: songs[currentIndex]?.songAvatar || '',
+    songIsLiked: songs[currentIndex]?.isLiked || false
   });
 
   const [musicIndex, setMusicIndex] = useState(currentIndex);
@@ -67,6 +69,12 @@ const MusicPlayer = () => {
         });
       }
     }
+
+
+    if (currentMusicDetails.songIsLiked) {
+      toggleFavorite();
+    }
+
   }, [musicIndex, songs]);
 
   // Handle next song
@@ -120,11 +128,13 @@ const MusicPlayer = () => {
       const updatedFavorites = favorites.filter(fav => fav.songSrc !== currentSong.songSrc);
       setFavorites(updatedFavorites);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      //TODO LIKE
     } else {
       // افزودن آهنگ به لیست علاقه‌مندی‌ها
       const updatedFavorites = [...favorites, currentSong];
       setFavorites(updatedFavorites);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      //TODO UNLIKE
     }
   };
 

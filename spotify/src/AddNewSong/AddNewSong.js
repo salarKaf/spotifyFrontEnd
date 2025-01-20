@@ -125,6 +125,7 @@ const AddNewSong = () => {
         setPhone(result.data.phoneNumber);
       } else {
         console.log("Failed to validate user");
+        localStorage.removeItem("token");
         navigate("/login");
       }
     })();
