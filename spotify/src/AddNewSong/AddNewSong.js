@@ -144,7 +144,6 @@ const AddNewSong = () => {
   return (
     <div className="container-fluid add-container h-100 d-flex flex-column">
       <div className="row flex-grow-1">
-        {/* بخش سمت چپ (فرم) */}
         <div className="col-6 d-flex align-items-center justify-content-center">
           <div className="Add-container p-4">
             <h2 className="text-white mb-4 add-title">Add New Song</h2>
@@ -208,9 +207,8 @@ const AddNewSong = () => {
                 </button>
               </div>
             </form>
-            {/* دکمه بازگشت به صفحه Home */}
             <button
-              onClick={() => navigate('/')} // رفتن به صفحه Home
+              onClick={() => navigate('/')} 
               style={{
                 marginTop: '20px',
                 padding: '10px 20px',
@@ -228,7 +226,6 @@ const AddNewSong = () => {
           </div>
         </div>
 
-        {/* بخش سمت راست (پیش‌نمایش کارت) */}
         <div className="col-6 d-flex align-items-center justify-content-center">
           {newTrack && (
             <div className="preview-container p-4">

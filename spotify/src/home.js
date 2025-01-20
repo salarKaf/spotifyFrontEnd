@@ -6,10 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import HomeIcon from "./assets/Home_Icon.png";
 import searchIcon from "./assets/Search_Icon.png";
 import LibIcon from "./assets/Lib_Icon.png";
-import { FaSearch, FaTrash } from "react-icons/fa"; // اضافه کردن آیکن سطل آشغال
+import { FaSearch, FaTrash } from "react-icons/fa"; 
 import Logo from "./assets/Logo.png";
 import { apiClient, getHomeSongs, getSearchSongs, validateUser } from "./API/userAPIservice";
-import { FaHeart } from "react-icons/fa"; // اضافه کردن آیکن قلب
+import { FaHeart } from "react-icons/fa";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -106,7 +106,7 @@ const Home = () => {
     navigate("/MusicPlayer", {
       state: {
         songs: songList,
-        currentSongId: songId // ارسال id آهنگ به جای index
+        currentSongId: songId 
       }
     });
   };
@@ -198,7 +198,7 @@ const Home = () => {
                   </div>
                   {/* آیکن سطل آشغال */}
                   <div className="trash-icon" onClick={(e) => {
-                    e.stopPropagation(); // جلوگیری از اجرای onClick کارت
+                    e.stopPropagation(); 
                     deleteRecommendedTrack(index);
                   }}>
                     <FaTrash />

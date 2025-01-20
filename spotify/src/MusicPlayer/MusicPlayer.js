@@ -5,14 +5,12 @@ import { likeMusic, unlikeMusic } from '../API/userAPIservice';
 
 const MusicPlayer = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // استفاده از useNavigate
+  const navigate = useNavigate(); 
   const { songs, currentSongId } = location.state || { songs: [], currentSongId: null };
 
-  // پیدا کردن آهنگ بر اساس id
   const currentSongIndex = songs.findIndex(song => song.id === currentSongId);
   const [musicIndex, setMusicIndex] = useState(currentSongIndex >= 0 ? currentSongIndex : 0);
 
-  // State for current music details
   const [currentMusicDetails, setCurrentMusicDetails] = useState({
     songId: songs[musicIndex]?.id || 0,
     songName: songs[musicIndex]?.title || 'No Song',
@@ -32,17 +30,14 @@ const MusicPlayer = () => {
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
 
-  // Ref for audio element
   const currentAudio = useRef(null);
 
-  // Video array
   const vidArray = [
     './assets/video/video1.mp4',
     './assets/video/video2.mp4',
     './assets/video/video3.mp4'
   ];
 
-  // Update music details when musicIndex changes
   useEffect(() => {
     if (songs.length > 0 && musicIndex >= 0 && musicIndex < songs.length) {
       const musicObject = songs[musicIndex];
@@ -59,14 +54,12 @@ const MusicPlayer = () => {
         currentAudio.current.src = musicObject.songSrc;
         currentAudio.current.load();
 
-        // پخش خودکار آهنگ بعد از لود شدن
         currentAudio.current.addEventListener('canplay', () => {
           currentAudio.current.play()
             .then(() => setIsAudioPlaying(true))
             .catch((error) => console.error("Error playing audio:", error));
         });
 
-        // Update total length when metadata is loaded
         currentAudio.current.addEventListener('loadedmetadata', () => {
           const duration = currentAudio.current.duration;
           const totalMin = Math.floor(duration / 60);
@@ -77,37 +70,31 @@ const MusicPlayer = () => {
     }
   }, [musicIndex, songs]);
 
-  // Handle next song
   const handleNextSong = () => {
     if (songs.length > 1) {
       setMusicIndex((prevIndex) => (prevIndex >= songs.length - 1 ? 0 : prevIndex + 1));
     }
   };
 
-  // Handle previous song
   const handlePrevSong = () => {
     if (songs.length > 1) {
       setMusicIndex((prevIndex) => (prevIndex === 0 ? songs.length - 1 : prevIndex - 1));
     }
   };
 
-  // Handle audio time update
   const handleAudioUpdate = () => {
     if (currentAudio.current) {
       const { currentTime, duration } = currentAudio.current;
 
-      // Update current time
       const currentMin = Math.floor(currentTime / 60);
       const currentSec = Math.floor(currentTime % 60);
       setMusicCurrentTime(`${currentMin < 10 ? `0${currentMin}` : currentMin} : ${currentSec < 10 ? `0${currentSec}` : currentSec}`);
 
-      // Update progress
       const progress = (currentTime / duration) * 100;
       setAudioProgress(isNaN(progress) ? 0 : progress);
     }
   };
 
-  // Handle progress bar change
   const handleProgressChange = (e) => {
     const newProgress = e.target.value;
     setAudioProgress(newProgress);
@@ -118,7 +105,6 @@ const MusicPlayer = () => {
     }
   };
 
-  // Handle favorite toggle
   const toggleFavorite = () => {
     const currentSong = songs[musicIndex];
     const isFavorite = favorites.some(fav => fav.songSrc === currentSong.songSrc);
@@ -130,13 +116,11 @@ const MusicPlayer = () => {
     }
 
     if (isFavorite) {
-      // حذف آهنگ از لیست علاقه‌مندی‌ها
       const updatedFavorites = favorites.filter(fav => fav.songSrc !== currentSong.songSrc);
       setFavorites(updatedFavorites);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
       unlikeMusic(token, currentMusicDetails.songId);
     } else {
-      // افزودن آهنگ به لیست علاقه‌مندی‌ها
       const updatedFavorites = [...favorites, currentSong];
       setFavorites(updatedFavorites);
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
@@ -144,7 +128,6 @@ const MusicPlayer = () => {
     }
   };
 
-  // Check if current song is favorite
   const isCurrentSongFavorite = favorites.some(fav => fav.songSrc === currentMusicDetails.songSrc);
 
   return (
@@ -157,13 +140,13 @@ const MusicPlayer = () => {
       ></audio>
       <video src={vidArray[videoIndex]} loop muted autoPlay className="backgroundVideo"></video>
       <div className="blackScreen"></div>
-      {/* دکمه بازگشت به صفحه Home */}
+
       <button
-        onClick={() => navigate('/')} // رفتن به صفحه Home
+        onClick={() => navigate('/')} 
         style={{
-          position: 'absolute', // استفاده از position absolute برای قرارگیری دکمه
-          top: '20px', // فاصله از بالا
-          left: '20px', // فاصله از چپ
+          position: 'absolute', 
+          top: '20px', 
+          left: '20px', 
           padding: '10px 20px',
           backgroundColor: '#c8acd6',
           color: '#17153b',
@@ -172,7 +155,7 @@ const MusicPlayer = () => {
           cursor: 'pointer',
           fontSize: '16px',
           fontWeight: 'bold',
-          zIndex: 1000 // برای اطمینان از نمایش دکمه روی سایر عناصر
+          zIndex: 1000 
         }}
       >
         Home
@@ -214,7 +197,6 @@ const MusicPlayer = () => {
           ></i>
           <i className="fa-solid fa-forward musicControler" onClick={handleNextSong}></i>
         </div>
-        {/* آیکون قلب برای علاقه‌مندی‌ها */}
         <i
           className={`fa-heart ${isCurrentSongFavorite ? 'fa-solid' : 'fa-regular'} favoriteIcon`}
           onClick={toggleFavorite}
