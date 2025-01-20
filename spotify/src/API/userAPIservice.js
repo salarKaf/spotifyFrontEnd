@@ -258,7 +258,7 @@ const AddCoverSong = async (token, imageFile) => {
 
   const AddSongToArtist = async (token, songData) => {
     try {
-      const response = await fetch(apiClient.baseURL + 'Core/artist/add', {
+      const response = await fetch(apiClient.baseURL + '/Core/artist/add', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
