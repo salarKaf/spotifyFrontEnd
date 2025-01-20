@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom'; // اضافه کردن useNavigate
 import "./MusicPlayer.css";
 import { likeMusic, unlikeMusic } from '../API/userAPIservice';
 
 const MusicPlayer = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // استفاده از useNavigate
   const { songs, currentSongId } = location.state || { songs: [], currentSongId: null };
 
   // پیدا کردن آهنگ بر اساس id
@@ -156,6 +157,26 @@ const MusicPlayer = () => {
       ></audio>
       <video src={vidArray[videoIndex]} loop muted autoPlay className="backgroundVideo"></video>
       <div className="blackScreen"></div>
+      {/* دکمه بازگشت به صفحه Home */}
+      <button
+        onClick={() => navigate('/')} // رفتن به صفحه Home
+        style={{
+          position: 'absolute', // استفاده از position absolute برای قرارگیری دکمه
+          top: '20px', // فاصله از بالا
+          left: '20px', // فاصله از چپ
+          padding: '10px 20px',
+          backgroundColor: '#c8acd6',
+          color: '#17153b',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          zIndex: 1000 // برای اطمینان از نمایش دکمه روی سایر عناصر
+        }}
+      >
+        Home
+      </button>
       <div className="music-Container">
         <p className="musicPlayer">Music Player</p>
         <p className="music-Head-Name">{currentMusicDetails.songName}</p>

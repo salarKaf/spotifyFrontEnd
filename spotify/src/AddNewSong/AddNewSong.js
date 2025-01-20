@@ -208,6 +208,23 @@ const AddNewSong = () => {
                 </button>
               </div>
             </form>
+            {/* دکمه بازگشت به صفحه Home */}
+            <button
+              onClick={() => navigate('/')} // رفتن به صفحه Home
+              style={{
+                marginTop: '20px',
+                padding: '10px 20px',
+                backgroundColor: '#c8acd6',
+                color: '#17153b',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '16px',
+                fontWeight: 'bold'
+              }}
+            >
+              Home
+            </button>
           </div>
         </div>
 
