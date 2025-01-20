@@ -18,9 +18,7 @@ function App() {
         <Route path="/home" element={<Home></Home>} />
         <Route path="/setPassword" element={<SetPass></SetPass>} />
         <Route path="/musicPlayer" element={<MusicPlayer></MusicPlayer>}/>
-        <Route path="/library" element={<Library></Library>}/>
         <Route path="/AddNewSong" element={<AddNewSong></AddNewSong>}/>
-        <Route  path="/profile"  element={<ProfilePage></ProfilePage>}/>
       </Routes>
     </Router>
   );

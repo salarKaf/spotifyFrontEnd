@@ -204,9 +204,7 @@ const Home = () => {
                 <button onClick={handleLogout} className="btn btn-logout">Log Out</button>
               </div>
               <div className="username-circle ms-3">
-                <Link to="/profile">
-                  <span className="username-letter">{username.charAt(0).toUpperCase()}</span>
-                </Link>
+                <span className="username-letter">{username.charAt(0).toUpperCase()}</span>
               </div>
             </div>
           </div>
@@ -261,21 +259,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="footer">
-        <Link to="/home" className={`icon-container`}>
-          <img src={HomeIcon} alt="Home" />
-          <span>Home</span>
-        </Link>
-        <Link to="/search" className={`icon-container`}>
-          <img src={searchIcon} alt="Search" />
-          <span>Search</span>
-        </Link>
-        <Link to="/library" className={`icon-container`}>
-          <img src={LibIcon} alt="Library" />
-          <span>Library</span>
-        </Link>
       </div>
     </div>
   );
