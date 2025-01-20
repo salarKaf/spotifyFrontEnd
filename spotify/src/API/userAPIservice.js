@@ -169,10 +169,153 @@ const validateUser = async (token) => {
     }
 };
 
+
+
+
+
+const AddCoverSong = async (token, imageFile) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', imageFile);
+  
+      const response = await fetch(apiClient.baseURL + '/Media/files/image', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+          // 'Content-Type' را تنظیم نکنید، مرورگر به طور خودکار آن را تنظیم می‌کند
+        },
+        body: formData
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json(); // بررسی پاسخ سرور
+        console.error("Server error:", errorData);
+        return {
+          success: false,
+          message: errorData.message || 'Failed to upload cover image',
+          key: null
+        };
+      }
+  
+      const data = await response.json();
+      return {
+        success: true,
+        message: 'Cover image uploaded successfully',
+        key: data.key
+      };
+    } catch (error) {
+      console.error("Error in AddCoverSong:", error);
+      return {
+        success: false,
+        message: 'Failed to upload cover image',
+        key: null
+      };
+    }
+  };
+  
+  const AddAudioFile = async (token, audioFile) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', audioFile);
+  
+      const response = await fetch(apiClient.baseURL + '/Media/files/audio', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+          // 'Content-Type' را تنظیم نکنید، مرورگر به طور خودکار آن را تنظیم می‌کند
+        },
+        body: formData
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json(); // بررسی پاسخ سرور
+        console.error("Server error:", errorData);
+        return {
+          success: false,
+          message: errorData.message || 'Failed to upload audio file',
+          key: null
+        };
+      }
+  
+      const data = await response.json();
+      return {
+        success: true,
+        message: 'Audio file uploaded successfully',
+        key: data.key
+      };
+    } catch (error) {
+      console.error("Error in AddAudioFile:", error);
+      return {
+        success: false,
+        message: 'Failed to upload audio file',
+        key: null
+      };
+    }
+  };
+
+
+
+
+  const AddSongToArtist = async (token, songData) => {
+    try {
+      const response = await fetch(apiClient.baseURL + 'Core/artist/add', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(songData)
+      });
+  
+      if (response.status !== 200) {
+        return {
+          success: false,
+          message: 'Failed to add song to artist'
+        };
+      }
+  
+      const data = await response.json();
+      return {
+        success: true,
+        message: 'Song added to artist successfully',
+        data: data
+      };
+    } catch (error) {
+      console.error("Error in AddSongToArtist:", error);
+      return {
+        success: false,
+        message: 'Failed to add song to artist'
+      };
+    }
+  };
+
+
 module.exports = {
     signUser,
     verifyPhone,
     setPassword,
     loginUser,
-    validateUser
+    validateUser,
+    AddCoverSong,
+    AddAudioFile,
+    AddSongToArtist
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

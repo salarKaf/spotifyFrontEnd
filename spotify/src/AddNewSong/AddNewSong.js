@@ -1,31 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { mockUser } from '../MockData';
 import './AddNewSong.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomeIcon from "../assets/Home_Icon.png";
 import searchIcon from "../assets/Search_Icon.png";
 import LibIcon from "../assets/Lib_Icon.png";
+import { validateUser, AddCoverSong, AddAudioFile, AddSongToArtist } from "../API/userAPIservice";
 
 const AddNewSong = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
   const [trackName, setTrackName] = useState("");
   const [releaseDate, setReleaseDate] = useState("");
-  const [artist, setArtist] = useState("");
   const [trackCover, setTrackCover] = useState(null);
   const [audioFile, setAudioFile] = useState(null);
   const [newTrack, setNewTrack] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  useEffect(() => {
-    const user = mockUser;
-    if (!user.isLoggedIn) {
-      navigate("/login");
-    } else {
-      setUsername(user.username);
-    }
-  }, []);
+  const [imageKey, setImageKey] = useState(null); // کلید تصویر
+  const [musicKey, setMusicKey] = useState(null); // کلید آهنگ
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("N/A");
+  const [phone, setPhone] = useState("N/A");
 
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
@@ -49,38 +43,100 @@ const AddNewSong = () => {
     e.preventDefault();
     const newTrack = {
       title: trackName,
-      artist: artist,
       date: releaseDate,
       cover: trackCover ? URL.createObjectURL(trackCover) : null,
       audio: audioFile,
     };
     setNewTrack(newTrack);
     setIsSubmitted(false);
-
-    // اضافه کردن آهنگ جدید به لیست آهنگ‌های کاربر
-    const userSongs = JSON.parse(localStorage.getItem("userSongs")) || [];
-    userSongs.push(newTrack);
-    localStorage.setItem("userSongs", JSON.stringify(userSongs));
   };
 
-  const handleComplete = () => {
-    const formData = new FormData();
-    formData.append("title", trackName);
-    formData.append("artist", artist);
-    formData.append("date", releaseDate);
-    formData.append("cover", trackCover);
-    formData.append("audio", audioFile);
+  const handleComplete = async () => {
+    const token = localStorage.getItem('token');
 
-    console.log("Sending data to backend:", formData);
+    if (!token) {
+      alert("User not authenticated");
+      navigate("/login");
+      return;
+    }
 
-    setIsSubmitted(true);
-    setNewTrack(null);
-    setTrackName("");
-    setReleaseDate("");
-    setArtist("");
-    setTrackCover(null);
-    setAudioFile(null);
+    try {
+      // Upload cover image
+      const coverResponse = await AddCoverSong(token, trackCover);
+      if (!coverResponse.success) {
+        alert("Failed to upload cover image");
+        return;
+      }
+      setImageKey(coverResponse.key); // ذخیره کلید تصویر
+
+      // Upload audio file
+      const audioResponse = await AddAudioFile(token, audioFile);
+      if (!audioResponse.success) {
+        alert("Failed to upload audio file");
+        return;
+      }
+      setMusicKey(audioResponse.key); // ذخیره کلید آهنگ
+
+      // Prepare song data
+      const songData = {
+        name: trackName,
+        releaseDate: releaseDate,
+        imageKey: coverResponse.key,
+        musicKey: audioResponse.key
+      };
+
+      // Add song to artist
+      const addSongResponse = await AddSongToArtist(token, songData);
+      if (!addSongResponse.success) {
+        alert("Failed to add song to artist");
+        return;
+      }
+
+      // Reset form and show success message
+      setIsSubmitted(true);
+      setNewTrack(null);
+      setTrackName("");
+      setReleaseDate("");
+      setTrackCover(null);
+      setAudioFile(null);
+      setImageKey(null);
+      setMusicKey(null);
+
+      alert("Song added successfully!");
+    } catch (error) {
+      console.error("Error in handleComplete:", error);
+      alert("An error occurred while processing your request.");
+    }
   };
+
+  useEffect(() => {
+    let token = localStorage.getItem('token');
+
+    if (!token) {
+      navigate("/login");
+    }
+
+    (async () => {
+      let result = await validateUser(token);
+
+      if (result.success) {
+        setUsername(result.data.username);
+        setEmail(result.data.email ?? "N/A");
+        setPhone(result.data.phoneNumber);
+      } else {
+        console.log("Failed to validate user");
+        navigate("/login");
+      }
+    })();
+  }, [navigate]);
+
+  let usernameTag = (<></>);
+
+  if (username == "" || username == null) {
+    usernameTag = (<Link to="/setpassword" className="btn btn-primary">Set Username Password</Link>);
+  } else {
+    usernameTag = (<h3>username: {username}</h3>);
+  }
 
   return (
     <div className="container-fluid add-container h-100 d-flex flex-column">
@@ -103,19 +159,7 @@ const AddNewSong = () => {
                   required
                 />
               </div>
-              <div className="form-group mb-4 d-flex align-items-center">
-                <label htmlFor="artist" className="form-label text-white me-3">
-                  Artist Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="artist"
-                  value={artist}
-                  onChange={(e) => setArtist(e.target.value)}
-                  required
-                />
-              </div>
+
               <div className="form-group mb-4 d-flex align-items-center">
                 <label htmlFor="releaseDate" className="form-label text-white me-3">
                   Release Date
@@ -177,7 +221,6 @@ const AddNewSong = () => {
                 />
                 <div className="card-body">
                   <h5 className="card-title">{newTrack.title}</h5>
-                  <p className="card-text">{newTrack.artist}</p>
                   <p className="card-text">{newTrack.date}</p>
                 </div>
                 <button onClick={handleComplete} className="btn btn-success">

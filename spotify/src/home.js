@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { mockUser, mockRecommendedTracks, mockRecentTracks } from './MockData';
+import { mockRecommendedTracks, mockRecentTracks } from './MockData';
 import './home.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomeIcon from "./assets/Home_Icon.png";
@@ -8,7 +8,6 @@ import searchIcon from "./assets/Search_Icon.png";
 import LibIcon from "./assets/Lib_Icon.png";
 import { FaSearch, FaTrash } from "react-icons/fa"; // اضافه کردن آیکن سطل آشغال
 import Logo from "./assets/Logo.png";
-import Notif from "./assets/notif.png";
 import { validateUser } from "./API/userAPIservice";
 
 const Home = () => {
