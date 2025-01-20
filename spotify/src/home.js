@@ -9,6 +9,8 @@ import LibIcon from "./assets/Lib_Icon.png";
 import { FaSearch, FaTrash } from "react-icons/fa"; // اضافه کردن آیکن سطل آشغال
 import Logo from "./assets/Logo.png";
 import { validateUser } from "./API/userAPIservice";
+import { FaHeart } from "react-icons/fa"; // اضافه کردن آیکن قلب
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -68,45 +70,49 @@ const Home = () => {
     }
   ]);
 
+  // دریافت لیست علاقه‌مندی‌ها از localStorage
+  const [favorites, setFavorites] = useState(() => {
+    const savedFavorites = localStorage.getItem('favorites');
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
-      const handleLogout = () => {
-        localStorage.removeItem("token");
-        navigate("/");
-    };
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("N/A");
+  const [phone, setPhone] = useState("N/A");
 
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("N/A");
-    const [phone, setPhone] = useState("N/A");
+  useEffect(() => {
+    let token = localStorage.getItem('token');
 
-    useEffect(() => {
-        let token = localStorage.getItem('token')
-
-        if (!token) {
-            navigate("/login");
-        }
-
-        (async () => {
-            let result = await validateUser(token);
-
-            if (result.success) {
-                setUsername(result.data.username);
-                setEmail(result.data.email ?? "N/A");
-                setPhone(result.data.phoneNumber);
-            } else {
-                console.log("Failed to validate user");
-                navigate("/login");
-            }
-        })()
-    }, [navigate]);
-
-    let usernameTag = (<></>)
-
-    if (username == ""  || username == null){
-        usernameTag = (<Link to="/setpassword" className="btn btn-primary">Set Username Password</Link>)
-    } else {
-        usernameTag = (<h3>username: {username}</h3>)
+    if (!token) {
+      navigate("/login");
     }
+
+    (async () => {
+      let result = await validateUser(token);
+
+      if (result.success) {
+        setUsername(result.data.username);
+        setEmail(result.data.email ?? "N/A");
+        setPhone(result.data.phoneNumber);
+      } else {
+        console.log("Failed to validate user");
+        navigate("/login");
+      }
+    })();
+  }, [navigate]);
+
+  let usernameTag = (<></>);
+
+  if (username == "" || username == null) {
+    usernameTag = (<Link to="/setpassword" className="btn btn-primary">Set Username Password</Link>);
+  } else {
+    usernameTag = (<h3>username: {username}</h3>);
+  }
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
@@ -119,10 +125,6 @@ const Home = () => {
     setUserSongs((prevSongs) => prevSongs.filter((_, i) => i !== index));
   };
 
-  // تابع حذف آهنگ از لیست recommendedTracks
-  const deleteRecommendedTrack = (index) => {
-    setRecommendedTracks((prevTracks) => prevTracks.filter((_, i) => i !== index));
-  };
 
   const playSong = (songIndex, songList) => {
     navigate("/MusicPlayer", {
@@ -131,6 +133,12 @@ const Home = () => {
         currentIndex: songIndex
       }
     });
+  };
+
+  const deleteRecommendedTrack = (index) => {
+    const updatedFavorites = favorites.filter((_, i) => i !== index);
+    setFavorites(updatedFavorites);
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
   return (
@@ -233,17 +241,20 @@ const Home = () => {
           <div className="recommended-section mt-4 mb-5">
             <h5 className="section-title">Recommended Tracks</h5>
             <div className="recommended-cards">
-              {mockRecommendedTracks.map((track, index) => (
-                <div key={index} className="card square-card" onClick={() => playSong(index, mockRecommendedTracks)}>
+              {/* نمایش لیست علاقه‌مندی‌ها */}
+              {favorites.map((track, index) => (
+                <div key={index} className="card" onClick={() => playSong(index, favorites)}>
                   <img src={track.songAvatar} alt={track.title} className="card-image" />
-                  <span className="card-title">{track.title}</span>
-                  <span className="card-artist">{track.Artist}</span>
-                  {/* آیکن سطل آشغال */}
-                  <div className="trash-icon" onClick={(e) => {
+                  <div className="card-text-home">
+                    <span className="card-title-home">{track.title}</span>
+                    <span className="card-artist-home">{track.Artist}</span>
+                  </div>
+                  {/* آیکن قلب */}
+                  <div className="heart-icon" onClick={(e) => {
                     e.stopPropagation(); // جلوگیری از اجرای onClick کارت
-                    deleteRecommendedTrack(index);
+                    deleteRecommendedTrack(index); // حذف آهنگ از لیست علاقه‌مندی‌ها
                   }}>
-                    <FaTrash />
+                    <FaHeart className={favorites.some(fav => fav.songSrc === track.songSrc) ? "fa-solid" : "fa-regular"} />
                   </div>
                 </div>
               ))}

@@ -20,6 +20,11 @@ const MusicPlayer = () => {
   const [musicTotalLength, setMusicTotalLength] = useState('00 : 00');
   const [musicCurrentTime, setMusicCurrentTime] = useState('00 : 00');
   const [videoIndex, setVideoIndex] = useState(0);
+  const [favorites, setFavorites] = useState(() => {
+    // بارگذاری لیست علاقه‌مندی‌ها از localStorage
+    const savedFavorites = localStorage.getItem('favorites');
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
 
   // Ref for audio element
   const currentAudio = useRef(null);
@@ -105,6 +110,27 @@ const MusicPlayer = () => {
     }
   };
 
+  // Handle favorite toggle
+  const toggleFavorite = () => {
+    const currentSong = songs[musicIndex];
+    const isFavorite = favorites.some(fav => fav.songSrc === currentSong.songSrc);
+
+    if (isFavorite) {
+      // حذف آهنگ از لیست علاقه‌مندی‌ها
+      const updatedFavorites = favorites.filter(fav => fav.songSrc !== currentSong.songSrc);
+      setFavorites(updatedFavorites);
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    } else {
+      // افزودن آهنگ به لیست علاقه‌مندی‌ها
+      const updatedFavorites = [...favorites, currentSong];
+      setFavorites(updatedFavorites);
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    }
+  };
+
+  // Check if current song is favorite
+  const isCurrentSongFavorite = favorites.some(fav => fav.songSrc === currentMusicDetails.songSrc);
+
   return (
     <div className="container">
       <audio
@@ -134,7 +160,7 @@ const MusicPlayer = () => {
           name="musicProgressBar"
           className="musicProgressBar"
           value={audioProgress}
-          onChange={handleProgressChange} // تغییر اینجا
+          onChange={handleProgressChange}
         />
         <div className="musicControlers">
           <i className="fa-solid fa-backward musicControler" onClick={handlePrevSong}></i>
@@ -152,6 +178,12 @@ const MusicPlayer = () => {
           ></i>
           <i className="fa-solid fa-forward musicControler" onClick={handleNextSong}></i>
         </div>
+        {/* آیکون قلب برای علاقه‌مندی‌ها */}
+        <i
+          className={`fa-heart ${isCurrentSongFavorite ? 'fa-solid' : 'fa-regular'} favoriteIcon`}
+          onClick={toggleFavorite}
+          style={{ cursor: 'pointer', color: isCurrentSongFavorite ? 'red' : 'white' }}
+        ></i>
       </div>
     </div>
   );
